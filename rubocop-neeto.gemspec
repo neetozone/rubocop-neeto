@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ["abhay.ashokan@bigbinary.com"]
 
   spec.summary = "Custom RuboCop cops for Neeto"
-  spec.homepage = "https://github.com/bigbinary/rubocop-neeto"
+  spec.homepage = "https://github.com/neetozone/rubocop-neeto"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
