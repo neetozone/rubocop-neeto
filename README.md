@@ -4,6 +4,7 @@
 
 1. [Neeto/UnsafeTableDeletion](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/UnsafeTableDeletion)
 2. [Neeto/UnsafeColumnDeletion](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/UnsafeColumnDeletion)
+3. [Neeto/DirectEnvAccess](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/DirectEnvAccess)
 
 ## Installation
 

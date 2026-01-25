@@ -26,7 +26,7 @@ module RuboCop
       #   # good
       #   default_timezone = Secvault.secrets.default_timezone
       #
-      #   # good (ENV access in config directory is permitted)
+      #   # good (ENV access is permitted in directories other than the app directory)
       #   config.log_level = ENV.fetch('LOG_LEVEL', 'info')
       #
       class DirectEnvAccess < Base
