@@ -31,7 +31,7 @@ module RuboCop
       #
       class DirectEnvAccess < Base
         MSG = "Do not use ENV directly. " \
-        "Use Secvault.secrets to maintain a single source of truth for configuration."
+              "Use Secvault.secrets to maintain a single source of truth for configuration."
 
         def_node_matcher :env_access?, <<~PATTERN
           (send (const {nil? cbase} :ENV) _ ...)
