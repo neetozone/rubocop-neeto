@@ -15,23 +15,18 @@ module RuboCop
       #   # Enforces the usage of `Secvault.secrets` over direct `ENV` access.
       #
       #   # bad
-      #   # app/services/payment_service.rb
       #   api_key = ENV['STRIPE_API_KEY']
       #
       #   # bad
-      #   # app/models/user.rb
       #   default_timezone = ENV['DEFAULT_TIMEZONE'] || 'UTC'
       #
       #   # good
-      #   # app/services/payment_service.rb
       #   api_key = Secvault.secrets.stripe_api_key
       #
       #   # good
-      #   # app/models/user.rb
       #   default_timezone = Secvault.secrets.default_timezone
       #
       #   # good (ENV access in config directory is permitted)
-      #   # config/environments/production.rb
       #   config.log_level = ENV.fetch('LOG_LEVEL', 'info')
       #
       class DirectEnvAccess < Base
