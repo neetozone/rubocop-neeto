@@ -23,3 +23,17 @@ Neeto/UnsafeColumnDeletion:
   VersionAdded: '0.1'
   Include:
     - db/**/*.rb
+
+Neeto/DirectEnvAccess:
+  Description: >-
+    Rails had `secrets.yml` which provided a single source of truth for all
+    environment variables and their fallback values. Rails deprecated this in
+    favor of encrypted credentials, so we created Secvault to maintain
+    centralized configuration. Direct usage of `ENV` bypasses this system,
+    making it harder to track what environment variables are being used and
+    their defaults. Use `Secvault.secrets` instead.
+  Enabled: true
+  Severity: refactor
+  VersionAdded: '0.1'
+  Include:
+    - app/**/*.rb
