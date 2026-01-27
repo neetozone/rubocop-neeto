@@ -21,4 +21,4 @@ gem "webrick", "~> 1.8"
 
 gem "rack", "3.0.11"
 
-gem "thor"
+gem "thor", ">= 1.3.2"
