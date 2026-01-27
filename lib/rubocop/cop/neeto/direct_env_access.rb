@@ -34,10 +34,10 @@ module RuboCop
               "Use Secvault.secrets to maintain a single source of truth for configuration."
 
         def_node_matcher :env_access?, <<~PATTERN
-          (send (const {nil? cbase} :ENV) _ ...)
+          (const {nil? cbase} :ENV)
         PATTERN
 
-        def on_send(node)
+        def on_const(node)
           return unless env_access?(node)
 
           add_offense(node)
