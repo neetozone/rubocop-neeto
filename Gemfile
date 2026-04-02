@@ -19,6 +19,6 @@ gem "yard", "~> 0.9.36"
 
 gem "webrick", "~> 1.8"
 
-gem "rack", "3.0.11"
+gem "rack", "3.1.21"
 
 gem "thor", ">= 1.3.2"
