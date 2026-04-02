@@ -38,7 +38,7 @@ Neeto/DirectEnvAccess:
   Include:
     - app/**/*.rb
 
-Neeto/LegacyJobInheritance:
+Neeto/DeprecatedJobBaseClass:
   Description: >-
     Jobs should not inherit directly from the legacy
     `NeetoCommonsBackend::BaseJobs::*` base classes. Use latency-based job

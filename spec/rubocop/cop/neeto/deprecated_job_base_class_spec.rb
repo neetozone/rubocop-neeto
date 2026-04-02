@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-RSpec.describe RuboCop::Cop::Neeto::LegacyJobInheritance, :config do
+RSpec.describe RuboCop::Cop::Neeto::DeprecatedJobBaseClass, :config do
   let(:config) { RuboCop::Config.new }
 
   it "registers an offense for legacy queue base classes in app jobs" do
-    RuboCop::Cop::Neeto::LegacyJobInheritance::LEGACY_SUPERCLASSES.each_key do |superclass|
+    RuboCop::Cop::Neeto::DeprecatedJobBaseClass::LEGACY_SUPERCLASSES.each_key do |superclass|
       expect_offense(<<~RUBY, "app/jobs/export_job.rb", superclass:, message: offense(superclass))
         class ExportJob < %{superclass}
                           ^{superclass} %{message}
@@ -61,8 +61,8 @@ RSpec.describe RuboCop::Cop::Neeto::LegacyJobInheritance, :config do
   private
 
     def offense(superclass)
-      replacement = RuboCop::Cop::Neeto::LegacyJobInheritance::LEGACY_SUPERCLASSES.fetch(superclass)
-      message = format(RuboCop::Cop::Neeto::LegacyJobInheritance::MSG, superclass:, replacement:)
-      "Neeto/LegacyJobInheritance: #{message}"
+      replacement = RuboCop::Cop::Neeto::DeprecatedJobBaseClass::LEGACY_SUPERCLASSES.fetch(superclass)
+      message = format(RuboCop::Cop::Neeto::DeprecatedJobBaseClass::MSG, superclass:, replacement:)
+      "Neeto/DeprecatedJobBaseClass: #{message}"
     end
 end

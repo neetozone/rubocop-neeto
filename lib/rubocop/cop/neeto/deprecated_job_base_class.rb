@@ -10,7 +10,7 @@ module RuboCop
       # This cop prevents new jobs from inheriting directly from the legacy
       # Neeto Commons base classes.
       #
-      # @example LegacyJobInheritance: true (default)
+      # @example DeprecatedJobBaseClass: true (default)
       #   # bad
       #   class ExportJob < NeetoCommonsBackend::BaseJobs::Default
       #   end
@@ -34,7 +34,7 @@ module RuboCop
       #     end
       #   end
       #
-      class LegacyJobInheritance < Base
+      class DeprecatedJobBaseClass < Base
         LEGACY_SUPERCLASSES = {
           "NeetoCommonsBackend::BaseJobs::Urgent" => "Use `LatencyBasedJobs::Within5Seconds` instead.",
           "NeetoCommonsBackend::BaseJobs::Auth" => "Use `LatencyBasedJobs::Within1Minute` instead.",
