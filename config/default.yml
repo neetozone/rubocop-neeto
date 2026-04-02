@@ -37,3 +37,19 @@ Neeto/DirectEnvAccess:
   VersionAdded: '0.1'
   Include:
     - app/**/*.rb
+
+Neeto/DeprecatedJobBaseClass:
+  Description: >-
+    Jobs should not inherit directly from the legacy
+    `NeetoCommonsBackend::BaseJobs::*` base classes. Use latency-based job
+    classes such as `LatencyBasedJobs::Within5Seconds`,
+    `LatencyBasedJobs::Within1Minute`, `LatencyBasedJobs::Within5Minutes`,
+    or `LatencyBasedJobs::Within1Hour` instead.
+  Enabled: true
+  Severity: refactor
+  VersionAdded: '0.1'
+  Include:
+    - app/jobs/**/*.rb
+    - app/workers/**/*.rb
+    - test/dummy/app/jobs/**/*.rb
+    - test/dummy/app/workers/**/*.rb
