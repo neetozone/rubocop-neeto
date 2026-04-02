@@ -48,7 +48,7 @@ module RuboCop
         def on_class(node)
           return if allowed_file_path?
 
-          superclass = node.children[1]
+          superclass = node.parent_class
           return unless superclass&.const_type?
 
           superclass_name = superclass.const_name
