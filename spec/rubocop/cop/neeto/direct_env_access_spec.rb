@@ -61,9 +61,9 @@ RSpec.describe RuboCop::Cop::Neeto::DirectEnvAccess, :config do
     expect_no_offenses(snippet)
   end
 
-  it "does not register an offense when Secvault.secrets is used" do
+  it "does not register an offense when Rails.application.secrets is used" do
     snippet = <<~RUBY
-      api_key = Secvault.secrets.stripe_api_key
+      api_key = Rails.application.secrets.stripe_api_key
     RUBY
     expect_no_offenses(snippet)
   end
