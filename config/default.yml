@@ -52,3 +52,19 @@ Neeto/DeprecatedJobBaseClass:
     - app/workers/**/*.rb
     - test/dummy/app/jobs/**/*.rb
     - test/dummy/app/workers/**/*.rb
+
+Neeto/WebhooksBypass:
+  Description: >-
+    Outbound user-configured webhooks should be sent through
+    `NeetoWebhooksEngine::DeliverService`, not raw HTTP libraries (Faraday,
+    HTTParty, RestClient). Pre-existing bypasses can be allowlisted in
+    `fleet_todo.yml` at the app root by running
+    `NEETO_FLEET_RECORD=1 bundle exec rubocop --only Neeto/WebhooksBypass`.
+  Enabled: true
+  Severity: warning
+  VersionAdded: '0.2'
+  Include:
+    - 'app/**/*webhook*.rb'
+    - 'app/**/webhooks/**/*.rb'
+    - 'app/**/webhook/**/*.rb'
+    - 'test/dummy/app/**/*webhook*.rb'
