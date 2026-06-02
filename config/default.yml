@@ -64,5 +64,3 @@ Neeto/FaradayOverHttparty:
   Include:
     - '**/Gemfile'
     - '**/Gemfile.common.rb'
-    - '**/gems.rb'
-    - '**/*.gemfile'
