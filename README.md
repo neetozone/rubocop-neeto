@@ -6,6 +6,7 @@
 2. [Neeto/UnsafeColumnDeletion](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/UnsafeColumnDeletion)
 3. [Neeto/DirectEnvAccess](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/DirectEnvAccess)
 4. [Neeto/DeprecatedJobBaseClass](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/DeprecatedJobBaseClass)
+5. [Neeto/FaradayOverHttparty](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/FaradayOverHttparty)
 
 ## Installation
 
