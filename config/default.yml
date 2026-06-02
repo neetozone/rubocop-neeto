@@ -52,3 +52,17 @@ Neeto/DeprecatedJobBaseClass:
     - app/workers/**/*.rb
     - test/dummy/app/jobs/**/*.rb
     - test/dummy/app/workers/**/*.rb
+
+Neeto/FaradayOverHttparty:
+  Description: >-
+    HTTParty has been removed from all Neeto applications in favor of Faraday,
+    which is already available. Do not re-add the `httparty` gem. See
+    https://github.com/neetozone/neeto-engineering/issues/1862 for more details.
+  Enabled: true
+  Severity: refactor
+  VersionAdded: '0.1'
+  Include:
+    - '**/Gemfile'
+    - '**/Gemfile.common.rb'
+    - '**/gems.rb'
+    - '**/*.gemfile'
