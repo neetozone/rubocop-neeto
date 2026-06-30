@@ -15,7 +15,7 @@ gem "rspec"
 
 gem "rubocop", "~> 1.21"
 
-gem "yard", "~> 0.9.42"
+gem "yard", "~> 0.9.44"
 
 gem "webrick", "~> 1.8"
 
