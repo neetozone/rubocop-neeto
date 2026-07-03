@@ -5,8 +5,8 @@ require_relative "lib/rubocop/neeto/version"
 Gem::Specification.new do |spec|
   spec.name = "rubocop-neeto"
   spec.version = RuboCop::Neeto::VERSION
-  spec.authors = ["Yedhin Kizhakkethara"]
-  spec.email = ["yedhin@bigbinary.com"]
+  spec.authors = ["Neeraj Singh"]
+  spec.email = ["neeraj@neeto.com"]
 
   spec.summary = "Custom RuboCop cops for Neeto"
   spec.homepage = "https://github.com/neetozone/rubocop-neeto"
