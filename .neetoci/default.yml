@@ -2,6 +2,18 @@ version: v1.0
 
 plan: standard-2
 
+paths:
+  - lib/**
+  - spec/**
+  - config/**
+  - Gemfile*
+  - rubocop-neeto.gemspec
+  - Rakefile
+  - .ruby-version
+  - .rubocop.yml
+  - .neetoci/default.yml
+  - .neetoci/scripts/**
+
 commands:
   - checkout
   - neetoci-version ruby 3.3.5
