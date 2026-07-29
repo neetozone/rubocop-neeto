@@ -11,7 +11,7 @@ paths:
   - Rakefile
   - .ruby-version
   - .rubocop.yml
-  - .neetoci/default.yml
+  - .neetoci/verify.yml
   - .neetoci/scripts/**
 
 commands:
