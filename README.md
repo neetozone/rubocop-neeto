@@ -7,6 +7,12 @@
 3. [Neeto/DirectEnvAccess](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/DirectEnvAccess)
 4. [Neeto/DeprecatedJobBaseClass](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/DeprecatedJobBaseClass)
 5. [Neeto/FaradayOverHttparty](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/FaradayOverHttparty)
+6. [Neeto/HtmlSafeOnDynamicString](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/HtmlSafeOnDynamicString) (opt-in)
+7. [Neeto/HtmlInStringLiteral](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/HtmlInStringLiteral) (opt-in)
+8. [Neeto/DirectLiquidRender](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/DirectLiquidRender) (opt-in)
+
+Opt-in cops ship with `Enabled: false`. Enable them in your `.rubocop.yml`, or
+run them explicitly with `rubocop --only Neeto/<CopName>`.
 
 ## Installation
 

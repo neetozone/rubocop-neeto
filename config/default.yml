@@ -64,3 +64,51 @@ Neeto/FaradayOverHttparty:
   Include:
     - '**/Gemfile'
     - '**/Gemfile.common.rb'
+
+Neeto/HtmlSafeOnDynamicString:
+  Description: >-
+    `html_safe`, `raw` and `safe_concat` mark a string as already safe, so
+    Rails emits it without escaping. Calling them on dynamic values
+    (interpolation, method results, variables) turns off output escaping for
+    that value. Build markup with `tag`, `content_tag`, `link_to`, `mail_to`
+    or `safe_join` instead, or annotate a reviewed call with
+    `# neeto:html-safe-reviewed <reason>`.
+  Enabled: false
+  Severity: error
+  VersionAdded: '0.1'
+  Include:
+    - app/**/*.rb
+    - lib/**/*.rb
+    - app/views/**/*.erb
+    - app/views/**/*.inky
+
+Neeto/HtmlInStringLiteral:
+  Description: >-
+    Plain Ruby strings never escape what is interpolated into them. Build
+    markup outside views with `tag`, `content_tag`, `link_to`, `mail_to`,
+    `safe_join` or a partial instead of string literals and heredocs.
+  Enabled: false
+  Severity: error
+  VersionAdded: '0.1'
+  Include:
+    - app/**/*.rb
+    - lib/**/*.rb
+  Exclude:
+    - app/views/**/*
+    - lib/tasks/**/*
+
+Neeto/DirectLiquidRender:
+  Description: >-
+    `Liquid::Template#render` does not escape its output. Build and render
+    Liquid templates only through the shared renderer, which requires an
+    explicit output format (`:html` or `:text`).
+  Enabled: false
+  Severity: error
+  VersionAdded: '0.1'
+  Include:
+    - app/**/*.rb
+    - lib/**/*.rb
+  Exclude:
+    - '**/neeto_liquid.rb'
+    - '**/neeto_liquid/**/*.rb'
+    - '**/liquid_template_validatable.rb'
