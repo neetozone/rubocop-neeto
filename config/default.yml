@@ -112,3 +112,21 @@ Neeto/DirectLiquidRender:
     - '**/neeto_liquid.rb'
     - '**/neeto_liquid/**/*.rb'
     - '**/liquid_template_validatable.rb'
+
+Neeto/HtmlTranslationInterpolation:
+  Description: >-
+    `I18n.t` does not escape interpolated values, even for `_html` keys. A
+    translation that contains HTML must not interpolate unescaped values.
+    Escape each value with `ERB::Util.html_escape`, or keep the markup out of
+    the translation and build it with `tag` or `content_tag`.
+  Enabled: false
+  Severity: error
+  VersionAdded: '0.1'
+  LocaleFiles:
+    - config/locales/en.yml
+  Include:
+    - app/**/*.rb
+    - lib/**/*.rb
+  Exclude:
+    - app/views/**/*
+    - lib/tasks/**/*

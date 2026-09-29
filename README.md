@@ -10,6 +10,7 @@
 6. [Neeto/HtmlSafeOnDynamicString](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/HtmlSafeOnDynamicString) (opt-in)
 7. [Neeto/HtmlInStringLiteral](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/HtmlInStringLiteral) (opt-in)
 8. [Neeto/DirectLiquidRender](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/DirectLiquidRender) (opt-in)
+9. [Neeto/HtmlTranslationInterpolation](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/HtmlTranslationInterpolation) (opt-in)
 
 Opt-in cops ship with `Enabled: false`. Enable them in your `.rubocop.yml`, or
 run them explicitly with `rubocop --only Neeto/<CopName>`.
