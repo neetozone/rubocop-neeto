@@ -8,6 +8,7 @@ module RuboCop
               "or a partial, which escape their arguments."
 
         HTML_TAG = %r{<(?:[a-z][a-z0-9]*[\s/>]|/[a-z][a-z0-9]*\s*>)}i
+        FORMAT_REFERENCE = /%<\w+>/
 
         ENCLOSING_LITERAL_TYPES = %i[dstr dsym xstr regexp].freeze
 
@@ -31,7 +32,7 @@ module RuboCop
         private
 
           def check(node, value)
-            return unless value.valid_encoding? && HTML_TAG.match?(value)
+            return unless value.valid_encoding? && HTML_TAG.match?(value.gsub(FORMAT_REFERENCE, ""))
             return if search_argument?(node)
 
             add_offense(node)

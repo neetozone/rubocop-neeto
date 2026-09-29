@@ -104,6 +104,20 @@ RSpec.describe RuboCop::Cop::Neeto::HtmlInStringLiteral, :config do
     RUBY
   end
 
+  it "does not register an offense for format references" do
+    expect_no_offenses(<<~RUBY)
+      path = format("/api/v1/organizations/%<subdomain>s/deactivate", subdomain: subdomain)
+    RUBY
+  end
+
+  it "registers an offense for markup next to a format reference" do
+    snippet = <<~RUBY
+      format("<p>%<name>s</p>", name: name)
+             ^^^^^^^^^^^^^^^^^ %{msg}
+    RUBY
+    expect_offense(snippet, msg: described_class::MSG)
+  end
+
   it "does not register an offense for symbols" do
     expect_no_offenses(<<~RUBY)
       :"<div>"
