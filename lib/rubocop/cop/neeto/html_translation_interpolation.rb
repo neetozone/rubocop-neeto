@@ -5,6 +5,25 @@ require "yaml"
 module RuboCop
   module Cop
     module Neeto
+      # `I18n.t` does not escape interpolated values, even for `_html` keys
+      # (only the view helper `t` does). A translation that contains HTML and
+      # interpolates an unescaped value outside a view lets that value inject
+      # markup. The cop reads the translations from `LocaleFiles`.
+      #
+      # @example HtmlTranslationInterpolation: true (opt-in)
+      #   # en.yml
+      #   #   seed:
+      #   #     description: "<p>Schedule a meeting with %{name}</p>"
+      #
+      #   # bad
+      #   I18n.t("seed.description", name: user.name)
+      #
+      #   # good
+      #   I18n.t("seed.description", name: ERB::Util.html_escape(user.name))
+      #
+      #   # good
+      #   tag.p(I18n.t("seed.description_text", name: user.name))
+      #
       class HtmlTranslationInterpolation < Base
         MSG = "Translation `%<key>s` contains HTML and interpolates %<variables>s, which `I18n.t` does not " \
               "escape. Escape each value with `ERB::Util.html_escape`, or keep the markup out of the translation " \

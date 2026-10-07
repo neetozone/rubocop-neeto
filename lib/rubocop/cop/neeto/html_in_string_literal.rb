@@ -3,6 +3,29 @@
 module RuboCop
   module Cop
     module Neeto
+      # Ruby strings never escape what is interpolated into them, so HTML built
+      # in a string or heredoc outside views is one missed escape away from an
+      # injection. Build markup with `tag`, `content_tag`, `link_to`,
+      # `mail_to`, `safe_join` or a partial, which escape their arguments.
+      #
+      # @example HtmlInStringLiteral: true (opt-in)
+      #   # bad
+      #   "<a href='#{url}'>#{name}</a>"
+      #
+      #   # bad
+      #   <<~HTML
+      #     <p>#{description}</p>
+      #   HTML
+      #
+      #   # good
+      #   link_to(name, url)
+      #
+      #   # good
+      #   tag.p(description)
+      #
+      #   # good (searching for markup is not building it)
+      #   body.include?("<table")
+      #
       class HtmlInStringLiteral < Base
         MSG = "Do not build HTML in Ruby strings. Use `tag`, `content_tag`, `link_to`, `mail_to`, `safe_join` " \
               "or a partial, which escape their arguments."

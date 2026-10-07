@@ -3,6 +3,31 @@
 module RuboCop
   module Cop
     module Neeto
+      # `html_safe`, `raw` and `safe_concat` mark a string as already safe, so
+      # Rails prints it without escaping. Calling them on a dynamic value
+      # (interpolation, a method result, a variable) turns escaping off for
+      # whatever that value holds, which lets user input inject markup. Build
+      # markup with `tag`, `content_tag`, `link_to`, `mail_to` or `safe_join`
+      # instead. A call that has been reviewed can be kept by adding
+      # `# neeto:html-safe-reviewed <reason>` on or above it.
+      #
+      # @example HtmlSafeOnDynamicString: true (opt-in)
+      #   # bad
+      #   "<b>#{booking.name}</b>".html_safe
+      #
+      #   # bad
+      #   raw(message.body)
+      #
+      #   # good
+      #   tag.b(booking.name)
+      #
+      #   # good
+      #   "<br>".html_safe
+      #
+      #   # good
+      #   # neeto:html-safe-reviewed admin-authored rich text
+      #   meeting.cancellation_policy.html_safe
+      #
       class HtmlSafeOnDynamicString < Base
         MSG = "Do not call `%<method>s` on a dynamic value. Build the markup with `tag`, `content_tag`, " \
               "`link_to`, `mail_to` or `safe_join`, or add `# neeto:html-safe-reviewed <reason>` if the value " \
