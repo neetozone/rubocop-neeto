@@ -100,18 +100,14 @@ Neeto/HtmlInStringLiteral:
 Neeto/DirectLiquidRender:
   Description: >-
     `Liquid::Template#render` does not escape its output. Build and render
-    Liquid templates only through the shared renderer, which requires an
-    explicit output format (`:html` or `:text`).
+    Liquid templates only through `NeetoCommonsBackend::LiquidRenderer`, which
+    escapes every output and requires an explicit format (`:html` or `:text`).
   Enabled: false
   Severity: error
   VersionAdded: '0.1'
   Include:
     - app/**/*.rb
     - lib/**/*.rb
-  Exclude:
-    - '**/neeto_liquid.rb'
-    - '**/neeto_liquid/**/*.rb'
-    - '**/liquid_template_validatable.rb'
 
 Neeto/HtmlTranslationInterpolation:
   Description: >-
