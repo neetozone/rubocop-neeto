@@ -102,6 +102,7 @@ Neeto/DirectLiquidRender:
     `Liquid::Template#render` does not escape its output. Build and render
     Liquid templates only through `NeetoCommonsBackend::LiquidRenderer`, which
     escapes every output and requires an explicit format (`:html` or `:text`).
+    Check a template's syntax with `NeetoCommonsBackend::LiquidRenderer.validate!`.
   Enabled: false
   Severity: error
   VersionAdded: '0.1'
