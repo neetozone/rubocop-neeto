@@ -7,12 +7,12 @@
 3. [Neeto/DirectEnvAccess](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/DirectEnvAccess)
 4. [Neeto/DeprecatedJobBaseClass](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/DeprecatedJobBaseClass)
 5. [Neeto/FaradayOverHttparty](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/FaradayOverHttparty)
-6. [Neeto/HtmlSafeOnDynamicString](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/HtmlSafeOnDynamicString) (opt-in)
-7. [Neeto/HtmlInStringLiteral](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/HtmlInStringLiteral) (opt-in)
-8. [Neeto/DirectLiquidRender](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/DirectLiquidRender) (opt-in)
-9. [Neeto/HtmlTranslationInterpolation](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/HtmlTranslationInterpolation) (opt-in)
+6. [Neeto/HtmlSafeOnDynamicString](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/HtmlSafeOnDynamicString)
+7. [Neeto/HtmlInStringLiteral](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/HtmlInStringLiteral)
+8. [Neeto/DirectLiquidRender](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/DirectLiquidRender)
+9. [Neeto/HtmlTranslationInterpolation](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/HtmlTranslationInterpolation)
 
-Opt-in cops ship with `Enabled: false`. Enable them in your `.rubocop.yml`, or run them explicitly with `rubocop --only Neeto/<CopName>`.
+The HTML-safety cops (6 to 9) report at `Severity: info` while products migrate, so they show in editors and CI output without failing the build. They move to `Severity: error` once every product is migrated.
 
 ## Installation
 

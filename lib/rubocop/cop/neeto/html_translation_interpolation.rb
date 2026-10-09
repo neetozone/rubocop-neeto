@@ -10,7 +10,7 @@ module RuboCop
       # interpolates an unescaped value outside a view lets that value inject
       # markup. The cop reads the translations from `LocaleFiles`.
       #
-      # @example HtmlTranslationInterpolation: true (opt-in)
+      # @example HtmlTranslationInterpolation: true (default)
       #   # en.yml
       #   #   seed:
       #   #     description: "<p>Schedule a meeting with %{name}</p>"

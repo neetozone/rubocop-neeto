@@ -8,7 +8,7 @@ module RuboCop
       # injection. Build markup with `tag`, `content_tag`, `link_to`,
       # `mail_to`, `safe_join` or a partial, which escape their arguments.
       #
-      # @example HtmlInStringLiteral: true (opt-in)
+      # @example HtmlInStringLiteral: true (default)
       #   # bad
       #   "<a href='#{url}'>#{name}</a>"
       #

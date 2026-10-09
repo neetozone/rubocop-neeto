@@ -73,8 +73,8 @@ Neeto/HtmlSafeOnDynamicString:
     that value. Build markup with `tag`, `content_tag`, `link_to`, `mail_to`
     or `safe_join` instead, or annotate a reviewed call with
     `# neeto:html-safe-reviewed <reason>`.
-  Enabled: false
-  Severity: error
+  Enabled: true
+  Severity: info
   VersionAdded: '0.1'
   Include:
     - app/**/*.rb
@@ -87,8 +87,8 @@ Neeto/HtmlInStringLiteral:
     Plain Ruby strings never escape what is interpolated into them. Build
     markup outside views with `tag`, `content_tag`, `link_to`, `mail_to`,
     `safe_join` or a partial instead of string literals and heredocs.
-  Enabled: false
-  Severity: error
+  Enabled: true
+  Severity: info
   VersionAdded: '0.1'
   Include:
     - app/**/*.rb
@@ -103,8 +103,8 @@ Neeto/DirectLiquidRender:
     Liquid templates only through `NeetoCommonsBackend::LiquidRenderer`, which
     escapes every output and requires an explicit format (`:html` or `:text`).
     Check a template's syntax with `NeetoCommonsBackend::LiquidRenderer.validate!`.
-  Enabled: false
-  Severity: error
+  Enabled: true
+  Severity: info
   VersionAdded: '0.1'
   Include:
     - app/**/*.rb
@@ -116,8 +116,8 @@ Neeto/HtmlTranslationInterpolation:
     translation that contains HTML must not interpolate unescaped values.
     Escape each value with `ERB::Util.html_escape`, or keep the markup out of
     the translation and build it with `tag` or `content_tag`.
-  Enabled: false
-  Severity: error
+  Enabled: true
+  Severity: info
   VersionAdded: '0.1'
   LocaleFiles:
     - config/locales/en.yml

@@ -9,7 +9,7 @@ module RuboCop
       # Code that only checks a template's syntax uses `validate!`, which raises
       # `Liquid::SyntaxError` like `Liquid::Template.parse` does.
       #
-      # @example DirectLiquidRender: true (opt-in)
+      # @example DirectLiquidRender: true (default)
       #   # bad
       #   Liquid::Template.parse(template.body).render(variables)
       #

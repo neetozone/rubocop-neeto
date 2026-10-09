@@ -11,7 +11,7 @@ module RuboCop
       # instead. A call that has been reviewed can be kept by adding
       # `# neeto:html-safe-reviewed <reason>` on or above it.
       #
-      # @example HtmlSafeOnDynamicString: true (opt-in)
+      # @example HtmlSafeOnDynamicString: true (default)
       #   # bad
       #   "<b>#{booking.name}</b>".html_safe
       #
