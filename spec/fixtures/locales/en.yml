@@ -1,0 +1,6 @@
+en:
+  seed:
+    description: "<p>Schedule a meeting with %{name}</p>"
+    plain: "Meeting with %{name}"
+    static: "<p>Hello</p>"
+    link_html: "<a href=\"%{url}\">here</a>"
