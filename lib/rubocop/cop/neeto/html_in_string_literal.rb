@@ -49,7 +49,7 @@ module RuboCop
         def on_dstr(node)
           return if part_of_another_literal?(node)
 
-          check(node, node.each_child_node(:str).map(&:value).join)
+          check(node, literal_text(node))
         end
 
         private
@@ -59,6 +59,10 @@ module RuboCop
             return if search_argument?(node)
 
             add_offense(node)
+          end
+
+          def literal_text(node)
+            node.each_child_node(:str, :dstr).map { |child| child.str_type? ? child.value : literal_text(child) }.join
           end
 
           def part_of_another_literal?(node)

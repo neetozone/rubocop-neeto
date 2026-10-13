@@ -1,0 +1,3 @@
+en:
+  mailer:
+    otp: "Code for <b>%{email}</b>"
