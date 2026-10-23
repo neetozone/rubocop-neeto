@@ -104,6 +104,16 @@ RSpec.describe RuboCop::Cop::Neeto::HtmlSafeOnDynamicString, :config do
     RUBY
   end
 
+  it "registers an offense for raw called through the view helpers" do
+    snippet = <<~RUBY
+      ActionController::Base.helpers.raw(message.body)
+                                     ^^^ %{msg}
+      view_context.raw(message.body)
+                   ^^^ %{msg}
+    RUBY
+    expect_offense(snippet, msg: message(:raw))
+  end
+
   it "does not register an offense for raw called on a receiver" do
     expect_no_offenses(<<~RUBY)
       request.raw(payload)

@@ -120,10 +120,12 @@ Neeto/HtmlTranslationInterpolation:
   Severity: info
   VersionAdded: '0.1'
   LocaleFiles:
-    - config/locales/en.yml
+    - config/locales/**/en.yml
+    - config/locales/**/*.en.yml
   Include:
     - app/**/*.rb
     - lib/**/*.rb
+    - app/views/**/*.erb
+    - app/views/**/*.inky
   Exclude:
-    - app/views/**/*
     - lib/tasks/**/*
