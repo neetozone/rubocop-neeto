@@ -1,0 +1,119 @@
+# syntax=docker/dockerfile:1.7
+#
+# Shared Dockerfile for Neeto Rails apps on NeetoDeploy (DockerFileBuild,
+# neetozone/neeto-deploy-web#8655). It comes from neeto-commons-backend's
+# common_files: don't edit it in the app. App-specific needs go in
+# .neetodeploy/, the same way Gemfile.common.rb and Gemfile split.
+#
+#   .neetodeploy/config.env     simple settings (see the defaults there)
+#   .neetodeploy/apt-build.txt  extra Ubuntu packages for building
+#   .neetodeploy/apt-runtime.txt  extra Ubuntu packages at runtime
+#   .neetodeploy/build.sh       optional extra build step, run last
+#   .neetodeploy/files/         copied into the runtime image at /
+#
+# RUBY_VERSION and NODE_VERSION are passed by the build, from .ruby-version
+# and .node-version. Builds see no secrets: anything that needs credentials,
+# such as uploading assets to S3, runs in release.
+
+ARG BASE=348674388966.dkr.ecr.us-east-1.amazonaws.com/neeto-deploy
+ARG RUBY_VERSION
+ARG NODE_VERSION
+
+# Only the files that decide which gems and npm packages get installed.
+# BuildKit caches by content, so a change to app code alone leaves the
+# install layers below untouched.
+FROM ${BASE}/ruby-build:${RUBY_VERSION}-node${NODE_VERSION} AS deps
+COPY . /src
+RUN mkdir /deps && cd /src \
+  && cp -a --parents Gemfile Gemfile.lock .ruby-version /deps/ \
+  && for f in Gemfile.common.rb .bundler-version package.json yarn.lock .yarnrc .npmrc .node-version; do \
+       [ -e "$f" ] && cp -a --parents "$f" /deps/; done; \
+     # Gems installed from a path inside the repo (engines, vendored gems).
+     awk '/^PATH/{p=1; next} p && /remote:/{print $2; p=0}' Gemfile.lock \
+       | while read -r dir; do [ -d "$dir" ] && cp -a --parents "$dir" /deps/; done; true
+
+FROM ${BASE}/ruby-build:${RUBY_VERSION}-node${NODE_VERSION} AS build
+WORKDIR /workspace
+COPY .neetodeploy/apt-build.txt /tmp/apt-build.txt
+RUN pkgs="$(grep -vE '^\s*(#|$)' /tmp/apt-build.txt || true)"; \
+    if [ -n "$pkgs" ]; then apt-get update && DEBIAN_FRONTEND=noninteractive \
+      apt-get install -y --no-install-recommends $pkgs && rm -rf /var/lib/apt/lists/*; fi
+COPY --from=deps /deps/ /workspace/
+# Download caches shared by every app on the BuildKit service.
+# The cache paths are explicit: the base images set HOME to the app user's
+# home, so Bundler's and yarn's defaults would miss the mounts.
+ENV BUNDLE_USER_CACHE=/var/cache/neeto-bundler \
+    BUNDLE_GLOBAL_GEM_CACHE=true \
+    YARN_CACHE_FOLDER=/var/cache/neeto-yarn
+# In-cluster caches of rubygems.org and npm, passed by the platform
+# (neetozone/neeto-deploy-web#8692, #8693). Unset, nothing changes.
+# Bundler's mirror setting leaves Gemfile.lock as it is. Yarn 1 downloads
+# from the exact URLs in yarn.lock, so those are pointed at the npm cache in
+# this layer's copy only; `COPY . .` below puts the original back.
+ARG GEM_MIRROR_URL=""
+ARG NPM_MIRROR_URL=""
+# The mirror goes in a Bundler config file used by this step only. The env
+# form, BUNDLE_MIRROR__HTTPS://RUBYGEMS__ORG/, isn't a valid shell name, and
+# the base image's `bundle` is a /bin/sh wrapper that drops it.
+RUN --mount=type=cache,id=neeto-bundler,target=/var/cache/neeto-bundler,sharing=shared \
+    if [ -n "$GEM_MIRROR_URL" ]; then \
+      export BUNDLE_USER_CONFIG=/tmp/neeto-gem-mirror-config; \
+      bundle config set --global mirror.https://rubygems.org "$GEM_MIRROR_URL"; fi; \
+    bundle install --jobs "$(nproc)" --retry 3 \
+  && rm -rf "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git \
+  && find "${BUNDLE_PATH}"/ruby/*/gems -maxdepth 2 -type d \( -name spec -o -name test \) -prune -exec rm -rf {} + \
+  # Precompile the gems for bootsnap here, once per Gemfile.lock change,
+  # rather than on every build. The app's own code is precompiled later.
+  # Apps without bootsnap (this one is Sinatra) skip both steps.
+  && if grep -q '^    bootsnap ' Gemfile.lock; then \
+       BOOTSNAP_READONLY= bundle exec bootsnap precompile --cache-dir tmp/bootsnap-cache --gemfile; fi
+RUN --mount=type=cache,id=neeto-yarn,target=/var/cache/neeto-yarn,sharing=shared \
+    if [ -f yarn.lock ]; then \
+      if [ -n "$NPM_MIRROR_URL" ]; then \
+        sed -i -e "s#https://registry.yarnpkg.com/#${NPM_MIRROR_URL%/}/#g" \
+               -e "s#https://registry.npmjs.org/#${NPM_MIRROR_URL%/}/#g" yarn.lock; fi; \
+      yarn install --frozen-lockfile --ignore-scripts --network-timeout 600000; fi
+
+COPY . .
+# The app's RAILS_ENV, passed by the platform as buildpack builds used it.
+# It is not a secret. Without it, the build assumes production.
+ARG RAILS_ENV=production
+# The asset compiler's cache persists between builds of the same app, so a
+# code-only change recompiles only what changed. APP_NAME keeps one app's
+# cache from growing into another's.
+ARG APP_NAME=default
+# set -e: the steps are joined with ";", so without it a failed yarn build or
+# precompile would still pass as long as the last command did.
+RUN --mount=type=cache,id=neeto-assets-${APP_NAME},target=/workspace/tmp/cache/assets,sharing=locked \
+    set -e; \
+    set -a; . .neetodeploy/config.env; set +a; \
+    if [ "${YARN_BUILD:-true}" = true ] && [ -f package.json ] && grep -q '"build"' package.json; then \
+      NODE_ENV=production yarn build; fi; \
+    # There is no database.yml, so Rails needs a DATABASE_URL to load.
+    # Precompile never connects to it. No assets:clean: a fresh build has no
+    # old assets, and commons hooks its S3 upload onto assets:clean. That
+    # upload belongs in release, where the credentials are.
+    if [ "${ASSETS_PRECOMPILE:-true}" = true ]; then \
+      SECRET_KEY_BASE=dummy DATABASE_URL=postgresql://build@localhost/build \
+        bundle exec rails assets:precompile; fi; \
+    if [ -x .neetodeploy/build.sh ]; then .neetodeploy/build.sh; fi; \
+    # Keep tmp/cache/assets: it's the mounted cache, not part of the image.
+    find tmp/cache -mindepth 1 -maxdepth 1 ! -name assets -exec rm -rf {} + 2>/dev/null || true; \
+    rm -rf node_modules log/*.log && mkdir -p tmp/pids log \
+  && if grep -q '^    bootsnap ' Gemfile.lock; then \
+       BOOTSNAP_READONLY= bundle exec bootsnap precompile \
+         --cache-dir tmp/bootsnap-cache app/ lib/; fi
+
+FROM ${BASE}/ruby-runtime:${RUBY_VERSION} AS runtime
+USER root
+COPY .neetodeploy/apt-runtime.txt /tmp/apt-runtime.txt
+RUN pkgs="$(grep -vE '^\s*(#|$)' /tmp/apt-runtime.txt || true)"; \
+    if [ -n "$pkgs" ]; then apt-get update && DEBIAN_FRONTEND=noninteractive \
+      apt-get install -y --no-install-recommends $pkgs && rm -rf /var/lib/apt/lists/*; fi
+COPY .neetodeploy/files/ /
+COPY --from=build --chown=1001:1001 /usr/local/bundle /usr/local/bundle
+COPY --from=build --chown=1001:1001 /workspace /workspace
+ENV BUNDLE_DEPLOYMENT=1 \
+    BUNDLE_PATH=/usr/local/bundle \
+    BUNDLE_WITHOUT=development:test
+USER 1001:1001

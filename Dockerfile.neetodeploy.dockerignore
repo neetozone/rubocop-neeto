@@ -1,0 +1,19 @@
+# Build context for Dockerfile.neetodeploy.
+.git
+node_modules
+tmp
+log
+public/assets
+public/packs
+coverage
+spec
+test
+playwright-tests
+selenium-tests
+docs
+doc
+.claude
+.github
+.husky
+.neetoci
+.semaphore
