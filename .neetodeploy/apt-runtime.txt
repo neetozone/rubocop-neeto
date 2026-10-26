@@ -1,0 +1,3 @@
+# Extra Ubuntu packages this app needs at runtime, one per line.
+# The base runtime image already has libvips, ImageMagick, wkhtmltopdf,
+# jemalloc and fonts.

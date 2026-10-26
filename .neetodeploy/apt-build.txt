@@ -1,0 +1,3 @@
+# Extra Ubuntu packages needed only to build this app, one per line.
+# The base build image already has compilers, git, and the libpq and
+# libvips headers.
