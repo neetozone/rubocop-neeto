@@ -109,6 +109,7 @@ Neeto/DirectLiquidRender:
   Include:
     - app/**/*.rb
     - lib/**/*.rb
+    - app/**/*.jbuilder
 
 Neeto/HtmlTranslationInterpolation:
   Description: >-
