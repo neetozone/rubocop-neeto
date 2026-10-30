@@ -12,7 +12,7 @@
 8. [Neeto/DirectLiquidRender](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/DirectLiquidRender)
 9. [Neeto/HtmlTranslationInterpolation](https://rubocop-neeto.neetodeployapp.com/docs/RuboCop/Cop/Neeto/HtmlTranslationInterpolation)
 
-The HTML-safety cops (6 to 9) report at `Severity: info` while products migrate, so they show in editors and CI output without failing the build. They move to `Severity: error` once every product is migrated.
+The HTML-safety cops (6 to 9) report at `Severity: refactor`, like the other Neeto cops, so their offenses fail RuboCop and erb_lint at the default fail level.
 
 ## Installation
 
