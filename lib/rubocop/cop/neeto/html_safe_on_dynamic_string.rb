@@ -37,6 +37,10 @@ module RuboCop
 
         RESTRICT_ON_SEND = %i[html_safe raw safe_concat].freeze
 
+        def_node_matcher :view_helpers?, <<~PATTERN
+          (send _ {:helpers :view_context})
+        PATTERN
+
         def on_send(node)
           value = trusted_value(node)
           return if value.nil? || static_string?(value) || reviewed?(node)
@@ -52,7 +56,7 @@ module RuboCop
             when :html_safe
               node.receiver if node.arguments.none?
             when :raw
-              node.first_argument if node.receiver.nil? && node.arguments.one?
+              node.first_argument if (node.receiver.nil? || view_helpers?(node.receiver)) && node.arguments.one?
             when :safe_concat
               node.first_argument if node.arguments.one?
             end

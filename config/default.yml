@@ -74,7 +74,7 @@ Neeto/HtmlSafeOnDynamicString:
     or `safe_join` instead, or annotate a reviewed call with
     `# neeto:html-safe-reviewed <reason>`.
   Enabled: true
-  Severity: info
+  Severity: refactor
   VersionAdded: '0.1'
   Include:
     - app/**/*.rb
@@ -88,7 +88,7 @@ Neeto/HtmlInStringLiteral:
     markup outside views with `tag`, `content_tag`, `link_to`, `mail_to`,
     `safe_join` or a partial instead of string literals and heredocs.
   Enabled: true
-  Severity: info
+  Severity: refactor
   VersionAdded: '0.1'
   Include:
     - app/**/*.rb
@@ -104,11 +104,12 @@ Neeto/DirectLiquidRender:
     escapes every output and requires an explicit format (`:html` or `:text`).
     Check a template's syntax with `NeetoCommonsBackend::LiquidRenderer.validate!`.
   Enabled: true
-  Severity: info
+  Severity: refactor
   VersionAdded: '0.1'
   Include:
     - app/**/*.rb
     - lib/**/*.rb
+    - app/**/*.jbuilder
 
 Neeto/HtmlTranslationInterpolation:
   Description: >-
@@ -117,13 +118,15 @@ Neeto/HtmlTranslationInterpolation:
     Escape each value with `ERB::Util.html_escape`, or keep the markup out of
     the translation and build it with `tag` or `content_tag`.
   Enabled: true
-  Severity: info
+  Severity: refactor
   VersionAdded: '0.1'
   LocaleFiles:
-    - config/locales/en.yml
+    - config/locales/**/en.yml
+    - config/locales/**/*.en.yml
   Include:
     - app/**/*.rb
     - lib/**/*.rb
+    - app/views/**/*.erb
+    - app/views/**/*.inky
   Exclude:
-    - app/views/**/*
     - lib/tasks/**/*

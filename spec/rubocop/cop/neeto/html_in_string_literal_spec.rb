@@ -53,6 +53,22 @@ RSpec.describe RuboCop::Cop::Neeto::HtmlInStringLiteral, :config do
     expect_offense(snippet, msg: described_class::MSG)
   end
 
+  it "registers an offense for markup in backslash-continued interpolated strings" do
+    snippet = <<~'RUBY'
+      "<iframe src=\"#{src}\" " \
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^ %{msg}
+        "title=\"#{title}\"></iframe>"
+    RUBY
+    expect_offense(snippet, msg: described_class::MSG)
+  end
+
+  it "does not register an offense for placeholders in angle brackets" do
+    expect_no_offenses(<<~RUBY)
+      "Usage: /analyse <repo-name>"
+      "Support <no-reply@example.com>"
+    RUBY
+  end
+
   it "registers one offense for an interpolated string with several markup parts" do
     snippet = <<~'RUBY'
       "<p>#{field}</p><p>#{value}</p>"
