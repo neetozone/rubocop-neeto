@@ -114,6 +114,22 @@ RSpec.describe RuboCop::Cop::Neeto::MailerEmailKinds, :config do
     RUBY
   end
 
+  it "counts a method made public again with public :name" do
+    expect_offense(<<~RUBY, path)
+      class MessageMailer < ApplicationMailer
+        email_kinds transactional: %i[member_email]
+
+        def member_email; end
+
+        private
+
+          def customer_email; end
+              ^^^^^^^^^^^^^^ Neeto/MailerEmailKinds: Add `customer_email` to `transactional` or `user_generated` in `email_kinds`.
+          public :customer_email
+      end
+    RUBY
+  end
+
   it "counts methods after a bare public again" do
     expect_offense(<<~RUBY, path)
       class MessageMailer < ApplicationMailer
