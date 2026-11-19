@@ -130,3 +130,15 @@ Neeto/HtmlTranslationInterpolation:
     - app/views/**/*.inky
   Exclude:
     - lib/tasks/**/*
+
+Neeto/MailerEmailKinds:
+  Description: >-
+    Every mailer declares which actions send transactional email and which
+    send user-generated email with `email_kinds`, so
+    `neeto-email-pipeline-engine` can send user-generated email from its own
+    domain. Each public action must be in exactly one list.
+  Enabled: true
+  Severity: refactor
+  VersionAdded: '0.1'
+  Include:
+    - app/mailers/**/*.rb
