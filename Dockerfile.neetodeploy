@@ -42,8 +42,9 @@ COPY --from=deps /deps/ /workspace/
 # Download caches shared by every app on the BuildKit service.
 # The cache paths are explicit: the base images set HOME to the app user's
 # home, so Bundler's and yarn's defaults would miss the mounts.
+# No BUNDLE_GLOBAL_GEM_CACHE: its extension cache skips builds that write
+# into the gem's own folder (llhttp-ffi, sassc), leaving the library out.
 ENV BUNDLE_USER_CACHE=/var/cache/neeto-bundler \
-    BUNDLE_GLOBAL_GEM_CACHE=true \
     YARN_CACHE_FOLDER=/var/cache/neeto-yarn
 # In-cluster caches of rubygems.org and npm, passed by the platform
 # (neetozone/neeto-deploy-web#8692, #8693). Unset, nothing changes.
