@@ -21,16 +21,19 @@ ARG NODE_VERSION
 
 # Only the files that decide which gems and npm packages get installed.
 # BuildKit caches by content, so a change to app code alone leaves the
-# install layers below untouched.
+# install layers below untouched. Gem and npm files are kept apart, so a
+# JS-only change doesn't reinstall the gems.
 FROM ${BASE}/ruby-build:${RUBY_VERSION}-node${NODE_VERSION} AS deps
 COPY . /src
-RUN mkdir /deps && cd /src \
-  && cp -a --parents Gemfile Gemfile.lock .ruby-version /deps/ \
-  && for f in Gemfile.common.rb .bundler-version package.json yarn.lock .yarnrc .npmrc .node-version; do \
-       [ -e "$f" ] && cp -a --parents "$f" /deps/; done; \
+RUN mkdir -p /deps/ruby /deps/js && cd /src \
+  && cp -a --parents Gemfile Gemfile.lock .ruby-version /deps/ruby/ \
+  && for f in Gemfile.common.rb .bundler-version; do \
+       [ -e "$f" ] && cp -a --parents "$f" /deps/ruby/; done; \
+     for f in package.json yarn.lock .yarnrc .npmrc .node-version; do \
+       [ -e "$f" ] && cp -a --parents "$f" /deps/js/; done; \
      # Gems installed from a path inside the repo (engines, vendored gems).
      awk '/^PATH/{p=1; next} p && /remote:/{print $2; p=0}' Gemfile.lock \
-       | while read -r dir; do [ -d "$dir" ] && cp -a --parents "$dir" /deps/; done; true
+       | while read -r dir; do [ -d "$dir" ] && cp -a --parents "$dir" /deps/ruby/; done; true
 
 FROM ${BASE}/ruby-build:${RUBY_VERSION}-node${NODE_VERSION} AS build
 WORKDIR /workspace
@@ -38,7 +41,7 @@ COPY .neetodeploy/apt-build.txt /tmp/apt-build.txt
 RUN pkgs="$(grep -vE '^\s*(#|$)' /tmp/apt-build.txt || true)"; \
     if [ -n "$pkgs" ]; then apt-get update && DEBIAN_FRONTEND=noninteractive \
       apt-get install -y --no-install-recommends $pkgs && rm -rf /var/lib/apt/lists/*; fi
-COPY --from=deps /deps/ /workspace/
+COPY --from=deps /deps/ruby/ /workspace/
 # Download caches shared by every app on the BuildKit service.
 # The cache paths are explicit: the base images set HOME to the app user's
 # home, so Bundler's and yarn's defaults would miss the mounts.
@@ -68,6 +71,7 @@ RUN --mount=type=cache,id=neeto-bundler,target=/var/cache/neeto-bundler,sharing=
   # Apps without bootsnap (this one is Sinatra) skip both steps.
   && if grep -q '^    bootsnap ' Gemfile.lock; then \
        BOOTSNAP_READONLY= bundle exec bootsnap precompile --cache-dir tmp/bootsnap-cache --gemfile; fi
+COPY --from=deps /deps/js/ /workspace/
 RUN --mount=type=cache,id=neeto-yarn,target=/var/cache/neeto-yarn,sharing=shared \
     if [ -f yarn.lock ]; then \
       if [ -n "$NPM_MIRROR_URL" ]; then \
